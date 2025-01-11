@@ -31,7 +31,18 @@ HTTP_SERVER.on('upgrade', (req, socket, head) => {
 
   //final check before before handling upgrade request 
   if (FUNCTIONS.checkClientHandShakeProtocol(socket, upgradeHeaderCheck, connectionHeaderCheck, methodCheck, originCheck)) {
+    upgradeConnection(req, socket, head)
   }
 })
 
+function upgradeConnection(req, socket, head) {
+  const clientKey = req.headers['sec-websocket-key'];
+  const headers = FUNCTIONS.createUpgradeHeaders(clientKey);
+  socket.write(headers);
+  //if successful now you have a valid websocket connection 
+  startWebSocketConnection(socket);
+}
 
+function startWebSocketConnection(socket) {
+
+}
